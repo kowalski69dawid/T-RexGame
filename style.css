@@ -1,0 +1,28 @@
+html {
+  height: 100%;
+}
+body {
+  min-height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+#box {
+  width: 100vw;
+  height: 100vh;
+  background: navy;
+  padding: 0;
+  margin: 0;
+  color: yellow;
+  text-align: center;
+}
+
+#canvas {
+  width: 95%;
+  height: 90%;
+  border: .2rem white dotted;
+  margin: 0;
+  padding: 0;
+  clear: both;
+}
