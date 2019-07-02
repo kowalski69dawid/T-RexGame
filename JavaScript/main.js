@@ -63,13 +63,16 @@ function detectionCollision() {
 
   if ((rex.x == gold.x)) {
     score.score += gold.price;
-    gold.speed /= 2;
+    if((score.score % 30 == 0) && (gold.speed > 10)) gold.speed -= 2;
+    gold.price++;
+    tree.speed -= 2;
     gold.collectPlay();
+    gold.y = Math.floor(Math.random() * area.height/2);
+    gold.x = area.width + Math.floor(Math.random() *500 + 1);
   }
 
   if(game.status == 1) setTimeout(detectionCollision, 20);
 }
 
-// setInterval(detectionCollision, 20);
 window.requestAnimationFrame(refreshArea);
 document.addEventListener("keydown", keyEvent);

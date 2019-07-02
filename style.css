@@ -1,11 +1,15 @@
 html {
   height: 100%;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
 }
 body {
   min-height: 100%;
   width: 100%;
   padding: 0;
   margin: 0;
+  background: navy;
 }
 
 #box {
@@ -20,9 +24,8 @@ body {
 
 #canvas {
   width: 95%;
-  height: 90%;
+  height: 80%;
   border: .2rem white dotted;
   margin: 0;
   padding: 0;
-  clear: both;
 }

@@ -23,18 +23,25 @@ class Rex {
   }
 
   jump() {
-    this.jumpAudio.currentTime = 0;
-    this.jumpAudio.play();
-    for (var i = 0; i < 30; i++) {
-        this.y -= 1;
-        this.x += 1;
-    }
+    if(this.defaultY == this.y) {
+      this.jumpAudio.currentTime = 0;
+      this.jumpAudio.play();
+
       for (var i = 0; i < 30; i++) {
-          this.y += 1;
+        setTimeout(() => {
+          this.y -= 1;
           this.x += 1;
+        }, 100);
       }
-
-
+      setTimeout(() => {
+        for (var i = 0; i < 30; i++) {
+          setTimeout(() => {
+            this.y += 1;
+            this.x += 1;
+          }, 100);
+        }
+      }, 200);
+    }
   }
 
   down() {
@@ -55,7 +62,7 @@ class Tree {
     this.height = area.height * 0.15;
     this.defaultX = area.width * 0.75;
     this.defaultY = area.height - 5 - this.height;
-    this.defaultSpeed = 15;
+    this.defaultSpeed = 5;
     this.speed = this.defaultSpeed;
     this.image.onload = () => this.draw();
   }
@@ -65,8 +72,7 @@ class Tree {
   }
 
   move() {
-    console.log("move tree");
-    if(this.x > 0) this.x--;
+    if(this.x > 0) this.x -= 2;
     else {
       this.x = area.width;
       rex.x = 0;
@@ -161,7 +167,7 @@ class Gold {
     else {
       this.x = area.width;
     }
-    if(game.status == 1) setTimeout(() => this.move, this.speed);
+    if(game.status == 1) setTimeout(() => this.move(), this.speed);
   }
 
 }
