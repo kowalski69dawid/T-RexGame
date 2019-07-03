@@ -62,7 +62,7 @@ class Tree {
     this.height = area.height * 0.15;
     this.defaultX = area.width * 0.75;
     this.defaultY = area.height - 5 - this.height;
-    this.defaultSpeed = 5;
+    this.defaultSpeed = 20;
     this.speed = this.defaultSpeed;
     this.image.onload = () => this.draw();
   }
@@ -99,10 +99,10 @@ class Score {
   show() {
     this.score++;
     if(this.score%10 == 0) {
-      tree.speed -= 1;
-      this.speed -= 25;
+      tree.speed--;
+      this.speed--;
     }
-    setTimeout(() => this.show(), this.speed);
+    if(game.status == 1) setTimeout(() => this.show(), this.speed);
   }
 
 }
@@ -111,6 +111,7 @@ class Board {
   constructor() {
     this.width = canvas.width;
     this.height = canvas.height;
+    this.fullscreen = false;
     this.clearBoard();
     this.createBoard();
   }
@@ -134,6 +135,18 @@ class Board {
     //console.log("clearBoard");
     canvasBoard.clearRect(0, 0, this.width, this.height);
   }
+
+  toggleFullscreen() {
+    if (this.fullscreen) {
+      document.exitFullscreen();
+      this.fullscreen = false;
+    }
+    else {
+      document.getElementById("canvas").requestFullscreen();
+      this.fullscreen = true;
+    }
+  }
+
 }
 
 class Gold {
@@ -141,8 +154,8 @@ class Gold {
     this.image = new Image();
     this.image.src = "Images/Gold.png";
     this.width = area.width * 0.075;
-    this.height = area.height * 0.075;
-    this.defaultY = area.height - 20 - Math.floor(Math.random() * rex.height);
+    this.height = area.height * 0.110;
+    this.defaultY = area.height - 20 - Math.floor(Math.random() * rex.height/2);
     this.defaultX = area.width - 2 * this.width;
     this.x = this.defaultX;
     this.y = this.defaultY;
@@ -202,6 +215,7 @@ class Game {
     gold.move();
     tree.move();
     score.show();
+    bird.move();
     detectionCollision();
   }
 
@@ -225,6 +239,36 @@ class Game {
     canvasBoard.font = "16px Arial";
     canvasBoard.fillStyle = "black";
     canvasBoard.fillText(`Press Space or key Up to start game`, area.width / 2, area.height / 2 + 50);
+  }
+
+}
+
+class Bird {
+  constructor() {
+    this.width = area.width * 0.1;
+    this.height = area.height * 0.15;
+
+    this.image = new Image();
+    this.image.src = "Images/Bird.png";
+    this.defaultX = area.width;
+    this.defaultY = area.height/2;
+    this.x = this.defaultX;
+    this.y = this.defaultY;
+    this.defaultSpeed = 10;
+    this.speed = this.defaultSpeed;
+  }
+
+  draw() {
+    canvasBoard.drawImage(this.image, this.x, this.y, this.width, this.height);
+  }
+
+  move() {
+    if(this.x > 0) this.x--;
+    else {
+      this.x = area.width;
+      this.y = area.height - Math.random() * area.height / 2;
+    }
+    if(game.status == 1) setTimeout(() => this.move(), this.speed);
   }
 
 }
