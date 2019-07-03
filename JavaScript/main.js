@@ -46,8 +46,7 @@ function keyEvent(key) {
           rex.jump();
           break;
         case 40:
-          rex.down();
-          break;
+          rex.duck();
       }
       break;
     case 2:
@@ -62,13 +61,19 @@ function keyEvent(key) {
 function detectionCollision() {
 
   // detect tree
-  if (((tree.x - rex.x < tree.width) && (rex.x < tree.x)) && (area.height - 5 - tree.height <= rex.y))  {
+  if ((tree.x < rex.x + rex.width) &&
+   (tree.x + tree.width > rex.x) &&
+   (tree.y < rex.y + rex.height) &&
+   (tree.y + tree.height > rex.y))  {
     game.status = 2;
     game.end();
   }
 
   // detect gold
-  if ((gold.x - rex.x < area.width/100) && (gold.y - rex.y < rex.height)) {
+  if ((gold.x < rex.x + rex.width) &&
+   (gold.x + gold.width > rex.x) &&
+   (gold.y < rex.y + rex.height) &&
+   (gold.y + gold.height > rex.y))  {
     score.score += gold.price;
     if((score.score % 30 == 0) && (gold.speed > 10)) gold.speed -= 2;
     gold.price++;
@@ -79,7 +84,10 @@ function detectionCollision() {
   }
 
   // detect bird
-  if ((bird.x - rex.x < area.width/100) && (bird.y - rex.y < rex.height - bird.height)) {
+  if (bird.x < rex.x + rex.width &&
+   bird.x + bird.width > rex.x &&
+   bird.y < rex.y + rex.height &&
+   bird.y + bird.height > rex.y)  {
     game.status = 2;
     game.end();
   }
@@ -89,8 +97,10 @@ function detectionCollision() {
 
 window.requestAnimationFrame(refreshArea);
 window.addEventListener("blur", () => {
-  console.log("blur");
   if(area.fullscreen) area.fullscreen = false;
 });
 document.addEventListener("keydown", keyEvent);
+document.addEventListener("keyup", (key) => {
+  if(key.keyCode == 40) rex.getUp();
+});
 document.getElementById("Fullscreen").addEventListener("click", () => area.toggleFullscreen());

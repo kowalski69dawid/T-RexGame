@@ -7,8 +7,15 @@ class Rex {
     this.x = this.defaultX;
     this.y = this.defaultY;
     this.step = area.width/100;
-    this.image = new Image()
-    this.image.src = "Images/Rex.png";
+
+    // image Rex
+    this.imageRun = new Image()
+    this.imageRun.src = "Images/Rex.png";
+    this.imageDuck = new Image()
+    this.imageDuck.src = "Images/Rex_Duck.png";
+    this.image = this.imageRun;
+
+    // Audio Rex
     this.jumpAudio = new Audio();
     this.jumpAudio.src = "Audio/Jump.wav";
     this.jumpAudio.volume = 0.1;
@@ -44,8 +51,12 @@ class Rex {
     }
   }
 
-  down() {
-    //console.log("down");
+  duck() {
+    this.image = this.imageDuck;
+  }
+
+  getUp() {
+    this.image = this.imageRun;
   }
 
   draw() {
@@ -112,13 +123,14 @@ class Board {
     this.width = canvas.width;
     this.height = canvas.height;
     this.fullscreen = false;
+    this.background = new Image();
+    this.background.src = "Images/Background.png";
     this.clearBoard();
     this.createBoard();
   }
 
   createBoard() {
-    canvasBoard.fillStyle = "white";
-    canvasBoard.fillRect(0, 0, this.width , this.height );
+    canvasBoard.drawImage(this.background, 0, 0, this.width, this.height);
     canvasBoard.strokeStyle = "green";
     canvasBoard.fillStyle = "green";
     canvasBoard.fillRect(0, this.height-5, this.width, 5);
@@ -212,6 +224,7 @@ class Game {
     gold.x = gold.defaultX;
     gold.y = gold.defaultY;
     score.score = 0;
+    bird.x = bird.defaultX;
     gold.move();
     tree.move();
     score.show();
@@ -250,8 +263,8 @@ class Bird {
 
     this.image = new Image();
     this.image.src = "Images/Bird.png";
-    this.defaultX = area.width;
-    this.defaultY = area.height/2;
+    this.defaultX = rex.x;
+    this.defaultY = rex.y - this.height;
     this.x = this.defaultX;
     this.y = this.defaultY;
     this.defaultSpeed = 10;
