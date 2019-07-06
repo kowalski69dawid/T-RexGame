@@ -61,13 +61,13 @@ function keyEvent(key) {
 function detectionCollision() {
 
   // detect tree
-  if ((tree.x < rex.x + rex.width) &&
-   (tree.x + tree.width > rex.x) &&
-   (tree.y < rex.y + rex.height) &&
-   (tree.y + tree.height > rex.y))  {
-    game.status = 2;
-    game.end();
-  }
+  // if ((tree.x < rex.x + rex.width) &&
+  //  (tree.x + tree.width > rex.x) &&
+  //  (tree.y < rex.y + rex.height) &&
+  //  (tree.y + tree.height > rex.y))  {
+  //   game.status = 2;
+  //   game.end();
+  // }
 
   // detect gold
   if ((gold.x < rex.x + rex.width) &&
@@ -75,22 +75,26 @@ function detectionCollision() {
    (gold.y < rex.y + rex.height) &&
    (gold.y + gold.height > rex.y))  {
     score.score += gold.price;
-    if((score.score % 30 == 0) && (gold.speed > 10)) gold.speed -= 2;
+    if((game.collectGold % 10 == 0) && (gold.speed > 10)) gold.speed -= 2;
     gold.price++;
-    tree.speed -= 2;
+    if((game.collectGold %5 == 0) && (tree.speed > 6)) tree.speed--;
     gold.collectPlay();
     gold.y = area.height - 20 - Math.floor(Math.random() * area.height / 3);
     gold.x = area.width + Math.floor(Math.random() *500 + 1);
   }
 
   // detect bird
-  if (bird.x < rex.x + rex.width &&
-   bird.x + bird.width > rex.x &&
-   bird.y < rex.y + rex.height &&
-   bird.y + bird.height > rex.y)  {
-    game.status = 2;
-    game.end();
-  }
+  // if (bird.x < rex.x + rex.width &&
+  //  bird.x + bird.width > rex.x &&
+  //  bird.y < rex.y + rex.height &&
+  //  bird.y + bird.height > rex.y)  {
+  //   game.status = 2;
+  //   game.end();
+  // }
+
+  // detect walls
+  if(rex.x <= 0) rex.x = 0;
+  else if(rex.x + rex.width >= area.width) rex.x = area.width - rex.width;
 
   if(game.status == 1) setTimeout(detectionCollision, 20);
 }

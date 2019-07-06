@@ -1,19 +1,25 @@
 class Rex {
   constructor() {
+    // Rex attributes
     this.width = area.width * 0.1;
     this.height = area.height * 0.15;
-    this.defaultX = 0;
+    this.defaultX = area.width/2;
     this.defaultY = area.height - 5 - this.height;
     this.x = this.defaultX;
     this.y = this.defaultY;
     this.step = area.width/100;
+    this.direction = "right";
 
     // image Rex
-    this.imageRun = new Image()
-    this.imageRun.src = "Images/Rex.png";
-    this.imageDuck = new Image()
-    this.imageDuck.src = "Images/Rex_Duck.png";
-    this.image = this.imageRun;
+    this.imageRunLeft = new Image()
+    this.imageRunLeft.src = "Images/RexLeft.png";
+    this.imageRunRight = new Image()
+    this.imageRunRight.src = "Images/RexRight.png";
+    this.imageDuckRight = new Image()
+    this.imageDuckRight.src = "Images/RexDuckRight.png";
+    this.imageDuckLeft = new Image()
+    this.imageDuckLeft.src = "Images/RexDuckLeft.png";
+    this.image = this.imageRunRight;
 
     // Audio Rex
     this.jumpAudio = new Audio();
@@ -22,10 +28,14 @@ class Rex {
   }
 
   left() {
+    this.direction = "left";
+    this.image = this.imageRunLeft;
     this.x -= this.step;
   }
 
   right() {
+    this.direction = "right";
+    this.image = this.imageRunRight;
     this.x += this.step;
   }
 
@@ -34,29 +44,49 @@ class Rex {
       this.jumpAudio.currentTime = 0;
       this.jumpAudio.play();
 
-      for (var i = 0; i < 30; i++) {
-        setTimeout(() => {
-          this.y -= 1;
-          this.x += 1;
-        }, 100);
-      }
-      setTimeout(() => {
+      if(this.direction == "right") { /* Jump right */
         for (var i = 0; i < 30; i++) {
           setTimeout(() => {
-            this.y += 1;
+            this.y -= 1;
             this.x += 1;
           }, 100);
         }
-      }, 200);
+        setTimeout(() => {
+          for (var i = 0; i < 30; i++) {
+            setTimeout(() => {
+              this.y += 1;
+              this.x -= 1;
+            }, 100);
+          }
+        }, 200);
+      }
+      else { /* Jump left */
+        for (var i = 0; i < 30; i++) {
+          setTimeout(() => {
+            this.y -= 1;
+            this.x -= 1;
+          }, 100);
+        }
+        setTimeout(() => {
+          for (var i = 0; i < 30; i++) {
+            setTimeout(() => {
+              this.y += 1;
+              this.x += 1;
+            }, 100);
+          }
+        }, 200);
+      }
     }
   }
-
+  
   duck() {
-    this.image = this.imageDuck;
+    if(this.direction == "left") this.image = this.imageDuckLeft;
+    else this.image = this.imageDuckRight;
   }
 
   getUp() {
-    this.image = this.imageRun;
+    if(this.direction == "left") this.image = this.imageRunLeft;
+    else this.image = this.imageRunRight;
   }
 
   draw() {
@@ -85,8 +115,7 @@ class Tree {
   move() {
     if(this.x > 0) this.x -= 2;
     else {
-      this.x = area.width;
-      rex.x = 0;
+      this.x = area.width + Math.random() * area.width/2;
     }
     if(game.status == 1) setTimeout(() => this.move(), this.speed);
   }
@@ -109,10 +138,7 @@ class Score {
 
   show() {
     this.score++;
-    if(this.score%10 == 0) {
-      tree.speed--;
-      this.speed--;
-    }
+
     if(game.status == 1) setTimeout(() => this.show(), this.speed);
   }
 
@@ -188,9 +214,10 @@ class Gold {
   }
 
   move() {
-    if(this.x > 0) this.x--;
+    if(this.y < area.height) this.y++;
     else {
-      this.x = area.width;
+      this.y = 0;
+      this.x = Math.random() * area.width;
     }
     if(game.status == 1) setTimeout(() => this.move(), this.speed);
   }
@@ -200,6 +227,7 @@ class Gold {
 class Game {
   constructor() {
     this.status = 0;
+    this.collectGold = 0;
     this.start();
   }
 
