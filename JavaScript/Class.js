@@ -55,7 +55,7 @@ class Rex {
           for (var i = 0; i < 30; i++) {
             setTimeout(() => {
               this.y += 1;
-              this.x -= 1;
+              this.x += 1;
             }, 100);
           }
         }, 200);
@@ -71,20 +71,22 @@ class Rex {
           for (var i = 0; i < 30; i++) {
             setTimeout(() => {
               this.y += 1;
-              this.x += 1;
+              this.x -= 1;
             }, 100);
           }
         }, 200);
       }
     }
   }
-  
+
   duck() {
+    this.y = this.defaultY + area.height * 0.05;
     if(this.direction == "left") this.image = this.imageDuckLeft;
     else this.image = this.imageDuckRight;
   }
 
   getUp() {
+    this.y = this.defaultY;
     if(this.direction == "left") this.image = this.imageRunLeft;
     else this.image = this.imageRunRight;
   }
@@ -101,7 +103,7 @@ class Tree {
     this.image.src = "Images/Tree.png";
     this.width = area.width * 0.1;
     this.height = area.height * 0.15;
-    this.defaultX = area.width * 0.75;
+    this.defaultX = area.width * 1.25;
     this.defaultY = area.height - 5 - this.height;
     this.defaultSpeed = 20;
     this.speed = this.defaultSpeed;
@@ -176,11 +178,17 @@ class Board {
 
   toggleFullscreen() {
     if (this.fullscreen) {
-      document.exitFullscreen();
+      if (document.exitFullscreen) document.exitFullscreen();
+      else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      else if (document.msExitFullscreen) document.msExitFullscreen();
       this.fullscreen = false;
     }
     else {
-      document.getElementById("canvas").requestFullscreen();
+      if (document.getElementById("canvas").requestFullscreen)  document.getElementById("canvas").requestFullscreen();
+      else if (document.getElementById("canvas").mozRequestFullScreen) document.getElementById("canvas").mozRequestFullScreen();
+      else if (document.getElementById("canvas").webkitRequestFullscreen) document.getElementById("canvas").webkitRequestFullscreen();
+      else if (document.getElementById("canvas").msRequestFullscreen) document.getElementById("canvas").msRequestFullscreen();
       this.fullscreen = true;
     }
   }

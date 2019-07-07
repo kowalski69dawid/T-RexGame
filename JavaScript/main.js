@@ -10,7 +10,6 @@ score = new Score();
 bird = new Bird();
 game = new Game();
 
-
 function refreshArea() {
   if(game.status == 1) {
     area.clearBoard();
@@ -59,15 +58,14 @@ function keyEvent(key) {
 }
 
 function detectionCollision() {
-
-  // detect tree
-  // if ((tree.x < rex.x + rex.width) &&
-  //  (tree.x + tree.width > rex.x) &&
-  //  (tree.y < rex.y + rex.height) &&
-  //  (tree.y + tree.height > rex.y))  {
-  //   game.status = 2;
-  //   game.end();
-  // }
+  //detect tree
+  if ((tree.x < rex.x + rex.width) &&
+   (tree.x + tree.width > rex.x) &&
+   (tree.y < rex.y + rex.height) &&
+   (tree.y + tree.height > rex.y))  {
+    game.status = 2;
+    game.end();
+  }
 
   // detect gold
   if ((gold.x < rex.x + rex.width) &&
@@ -84,13 +82,13 @@ function detectionCollision() {
   }
 
   // detect bird
-  // if (bird.x < rex.x + rex.width &&
-  //  bird.x + bird.width > rex.x &&
-  //  bird.y < rex.y + rex.height &&
-  //  bird.y + bird.height > rex.y)  {
-  //   game.status = 2;
-  //   game.end();
-  // }
+  if (bird.x < rex.x + rex.width &&
+   bird.x + bird.width > rex.x &&
+   bird.y < rex.y + rex.height &&
+   bird.y + bird.height > rex.y)  {
+    game.status = 2;
+    game.end();
+  }
 
   // detect walls
   if(rex.x <= 0) rex.x = 0;
