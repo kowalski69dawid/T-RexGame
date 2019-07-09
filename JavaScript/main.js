@@ -10,6 +10,11 @@ score = new Score();
 bird = new Bird();
 game = new Game();
 
+function distanceObject() {
+  if((tree.direction == "right") && (bird.y - bird.height - rex.height <= tree.y)) bird.y--;
+  if(game.status == 1) setTimeout(distanceObject, 200);
+}
+
 function refreshArea() {
   if(game.status == 1) {
     area.clearBoard();
@@ -28,7 +33,6 @@ function keyEvent(key) {
   switch (game.status) {
     case 0:
       if(key.keyCode == 32 || key.keyCode == 38) {
-        game.status = 1;
         game.game();
       }
       break;
@@ -50,7 +54,6 @@ function keyEvent(key) {
       break;
     case 2:
       if(key.keyCode == 32 || key.keyCode == 38) {
-        game.status = 1;
         game.game();
       }
       break;
@@ -63,7 +66,6 @@ function detectionCollision() {
    (tree.x + tree.width > rex.x) &&
    (tree.y < rex.y + rex.height) &&
    (tree.y + tree.height > rex.y))  {
-    game.status = 2;
     game.end();
   }
 
@@ -86,13 +88,13 @@ function detectionCollision() {
    bird.x + bird.width > rex.x &&
    bird.y < rex.y + rex.height &&
    bird.y + bird.height > rex.y)  {
-    game.status = 2;
     game.end();
   }
 
   // detect walls
   if(rex.x <= 0) rex.x = 0;
   else if(rex.x + rex.width >= area.width) rex.x = area.width - rex.width;
+  else if(rex.y >= area.height) rex.y = rex.defaultY;
 
   if(game.status == 1) setTimeout(detectionCollision, 20);
 }

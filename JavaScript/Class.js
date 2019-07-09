@@ -99,14 +99,20 @@ class Rex {
 
 class Tree {
   constructor() {
-    this.image = new Image();
-    this.image.src = "Images/Tree.png";
     this.width = area.width * 0.1;
     this.height = area.height * 0.15;
     this.defaultX = area.width * 1.25;
     this.defaultY = area.height - 5 - this.height;
     this.defaultSpeed = 20;
     this.speed = this.defaultSpeed;
+    /*
+      right: move from left to right
+      left: move from right to left
+    */
+    this.direction = "right";
+
+    this.image = new Image();
+    this.image.src = "Images/Tree.png";
     this.image.onload = () => this.draw();
   }
 
@@ -115,10 +121,21 @@ class Tree {
   }
 
   move() {
-    if(this.x > 0) this.x -= 2;
-    else {
-      this.x = area.width + Math.random() * area.width/2;
+    if((this.x > 0 - area.width/2) && (this.x < area.width + area.width/2)) {
+      if(this.direction == "right") this.x += 2;
+      else this.x -= 2;
     }
+    else {
+      if(Math.floor(Math.random() * 100)%2 == 0) {
+        this.direction = "left";
+        this.x = area.width + Math.random() * area.width/2;
+      }
+      else {
+        this.direction = "right";
+        this.x = 0 - Math.random() * area.width/2;
+      }
+    }
+
     if(game.status == 1) setTimeout(() => this.move(), this.speed);
   }
 
@@ -129,6 +146,7 @@ class Score {
     this.score = 0;
     this.defaultSpeed = 1000;
     this.speed = this.defaultSpeed;
+    this.winScore = 2000;
   }
 
   draw() {
@@ -236,10 +254,12 @@ class Game {
   constructor() {
     this.status = 0;
     this.collectGold = 0;
+
     this.start();
   }
 
   start() { // 0 code
+    this.status = 0;
     canvasBoard.fillStyle = "white";
     canvasBoard.fillRect(0, 0, area.width, area.height);
     canvasBoard.fillStyle = "black";
@@ -250,31 +270,48 @@ class Game {
 
   game() { // 1 code
     // reset variable
+    this.status = 1;
+    //tree
     tree.speed = tree.defaultSpeed;
-    score.speed = score.defaultSpeed;
-    gold.speed = gold.defaultSpeed;
     tree.x = tree.defaultX;
     tree.y = tree.defaultY;
+
+    // rex
     rex.x = rex.defaultX;
     rex.y = rex.defaultY;
+
+    //bird
+    bird.x = bird.defaultX;
+    bird.speed = bird.defaultSpeed;
+
+    //gold
+    gold.speed = gold.defaultSpeed;
     gold.x = gold.defaultX;
     gold.y = gold.defaultY;
+
+    //score
+    score.speed = score.defaultSpeed;
     score.score = 0;
-    bird.x = bird.defaultX;
+
+    this.collectGold = 0;
+
     gold.move();
     tree.move();
     score.show();
     bird.move();
     detectionCollision();
+    distanceObject();
   }
 
   end() { // 2 code
-    //console.error("Game Over");
     this.status = 2;
-    this.endBoard();
+    if(score.score < score.winScore)
+      this.lostBoard();
+    else
+      this.winBoard();
   }
 
-  endBoard() {
+  lostBoard() {
     area.clearBoard();
     canvasBoard.fillStyle = "white";
     canvasBoard.fillRect(0, 0, area.width, area.height);
@@ -299,8 +336,8 @@ class Bird {
 
     this.image = new Image();
     this.image.src = "Images/Bird.png";
-    this.defaultX = rex.x;
-    this.defaultY = rex.y - this.height;
+    this.defaultX = area.width;
+    this.defaultY = Math.random(area.height);
     this.x = this.defaultX;
     this.y = this.defaultY;
     this.defaultSpeed = 10;
