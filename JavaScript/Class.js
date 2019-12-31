@@ -280,10 +280,6 @@ class Game {
     rex.x = rex.defaultX;
     rex.y = rex.defaultY;
 
-    //bird
-    bird.x = bird.defaultX;
-    bird.speed = bird.defaultSpeed;
-
     //gold
     gold.speed = gold.defaultSpeed;
     gold.x = gold.defaultX;
@@ -298,9 +294,7 @@ class Game {
     gold.move();
     tree.move();
     score.show();
-    bird.move();
     detectionCollision();
-    distanceObject();
   }
 
   end() { // 2 code
@@ -325,36 +319,6 @@ class Game {
     canvasBoard.font = "16px Arial";
     canvasBoard.fillStyle = "black";
     canvasBoard.fillText(`Press Space or key Up to start game`, area.width / 2, area.height / 2 + 50);
-  }
-
-}
-
-class Bird {
-  constructor() {
-    this.width = area.width * 0.1;
-    this.height = area.height * 0.15;
-
-    this.image = new Image();
-    this.image.src = "Images/Bird.png";
-    this.defaultX = area.width;
-    this.defaultY = Math.random(area.height);
-    this.x = this.defaultX;
-    this.y = this.defaultY;
-    this.defaultSpeed = 10;
-    this.speed = this.defaultSpeed;
-  }
-
-  draw() {
-    canvasBoard.drawImage(this.image, this.x, this.y, this.width, this.height);
-  }
-
-  move() {
-    if(this.x > 0) this.x--;
-    else {
-      this.x = area.width;
-      this.y = area.height - Math.random() * area.height / 2;
-    }
-    if(game.status == 1) setTimeout(() => this.move(), this.speed);
   }
 
 }

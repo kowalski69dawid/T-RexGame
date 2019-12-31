@@ -7,13 +7,8 @@ rex = new Rex();
 tree = new Tree();
 gold = new Gold();
 score = new Score();
-bird = new Bird();
 game = new Game();
 
-function distanceObject() {
-  if((tree.direction == "right") && (bird.y - bird.height - rex.height <= tree.y)) bird.y--;
-  if(game.status == 1) setTimeout(distanceObject, 200);
-}
 
 function refreshArea() {
   if(game.status == 1) {
@@ -23,7 +18,6 @@ function refreshArea() {
     rex.draw();
     score.draw();
     gold.draw();
-    bird.draw();
   }
   window.requestAnimationFrame(refreshArea);
 }
@@ -81,14 +75,6 @@ function detectionCollision() {
     gold.collectPlay();
     gold.y = area.height - 20 - Math.floor(Math.random() * area.height / 3);
     gold.x = area.width + Math.floor(Math.random() *500 + 1);
-  }
-
-  // detect bird
-  if (bird.x < rex.x + rex.width &&
-   bird.x + bird.width > rex.x &&
-   bird.y < rex.y + rex.height &&
-   bird.y + bird.height > rex.y)  {
-    game.end();
   }
 
   // detect walls
